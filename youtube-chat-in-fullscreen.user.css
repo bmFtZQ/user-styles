@@ -1,0 +1,112 @@
+/* ==UserStyle==
+@name           Move YouTube chat into fullscreen player
+@version        1.0.0
+@namespace      github.com/openstyles/stylus
+@description    Moves the live chat into the fullscreen player, like in Twitch theatre mode.
+@author         bmFtZQ
+@homepageURL    https://github.com/bmFtZQ/user-styles
+@updateURL      https://raw.githubusercontent.com/bmFtZQ/user-styles/main/youtube-chat-in-fullscreen.user.css
+@license        MIT
+@preprocessor   less
+@var range  pref-chat-width "Chat width" [320, 160, 480, 20, "px"]
+@var select pref-chat-side  "Chat side" {
+  "Left": "left",
+  "Right*": "right"
+}
+==/UserStyle== */
+
+@-moz-document domain("youtube.com") {
+
+  /* Fixes extra 1px of space added to the right of the screen. */
+  ytd-app[scrolling] {
+    right: calc(var(--ytd-app-fullerscreen-scrollbar-width) * -1) !important;
+  }
+
+  /* Only enable styles when the chat is available and expanded. */
+  ytd-watch-flexy[fullscreen][should-stamp-chat]:has(#chat.ytd-watch-flexy:not([collapsed])) {
+
+    /* Remove position from a parent element so chat can overlay video player. */
+    & #secondary.ytd-watch-flexy,
+    & #below.ytd-watch-flexy {
+      position: static !important;
+    }
+
+    & #chat.ytd-watch-flexy {
+      position: absolute !important;
+      top: 0 !important;
+      height: 100vh !important;
+      width: @pref-chat-width !important;
+      border-width: 0 !important;
+      margin: 0 !important;
+      box-sizing: border-box;
+
+      /* When chat is positioned to the left. */
+      & when (@pref-chat-side = left) {
+        left: 0 !important;
+        border-right-width: 1px !important;
+      }
+
+      /* When chat is positioned to the right. */
+      & when (@pref-chat-side = right) {
+        right: 0 !important;
+        border-left-width: 1px !important;
+      }
+
+      /* Remove rounded corners from the chat window. */
+      &,
+      & #show-hide-button ytd-toggle-button-renderer,
+      & iframe.ytd-live-chat-frame {
+        border-radius: 0 !important;
+      }
+    }
+
+    /* Offset the video player to make room for the chat window. */
+    & #player-container.ytd-watch-flexy {
+
+      /* When chat is positioned to the left. */
+      & when (@pref-chat-side = left) {
+        left: @pref-chat-width !important;
+      }
+
+      /* When chat is positioned to the right. */
+      & when (@pref-chat-side = right) {
+        right: @pref-chat-width !important;
+      }
+    }
+
+    /* Resize video player elements. */
+    & .html5-video-player .video-click-tracking,
+    & .html5-video-player .video-stream,
+    & .ytp-progress-bar-container:not(:has(.ytp-chapters-container > * + *)) .ytp-chapter-hover-container {
+      width: 100% !important;
+    }
+
+    /* Adjust positioning of video inside player. */
+    & .html5-video-player .video-stream {
+      height: initial !important;
+      top: 50% !important;
+      translate: 0 -50%;
+    }
+
+    & .html5-video-container {
+      height: 100% !important;
+    }
+
+    /* Prevent user from using seek bar, as it will not work properly due to
+     * adjustment to width. */
+    & .ytp-big-mode .ytp-progress-bar-container {
+      pointer-events: none !important;
+
+      /* Remove seek bar when there are mutliple chapters in a video as it will
+       * not work properly due to adjustment to width. */
+      &:has(.ytp-chapters-container > * + *) {
+        display: none !important;
+      }
+    }
+
+    /* Adjust width of video player controls. */
+    & .ytp-big-mode .ytp-chrome-bottom {
+      width: calc(100% - 48px) !important;
+    }
+  }
+}
