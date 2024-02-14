@@ -1,0 +1,36 @@
+/* ==UserStyle==
+@name           Video Filters
+@version        1.0.0
+@namespace      github.com/openstyles/stylus
+@description    A collection of useful filters and scale options for videos.
+@author         bmFtZQ
+@homepageURL    https://github.com/bmFtZQ/user-styles
+@license        MIT
+@var range  pref-brightness-level "Brightness level" [100, 50, 500, 10]
+@var select range-filter      "RGB range" {
+  "No adjustment*": "brightness(1)",
+  "Black levels only": "brightness(0.94) contrast(1.14)",
+  "Full RGB range adjustment": "contrast(1.14)"
+}
+@var select invert-filter     "Invert video" {
+  "No invert*": "brightness(1)",
+  "Brightness only": "invert(1) hue-rotate(180deg)",
+  "Full invert": "invert(1)"
+}
+@var select ratio-transform   "Convert aspect ratio" {
+  "Normal*": "none",
+  "16x9 to 4x3": "scaleX(0.75)",
+  "4x3 to 16x9": "scaleX(1.33)",
+}
+@var select crop-setting      "Crop video" {
+  "Normal*": "none",
+  "Remove CC": "inset(1% 0 0)",
+}
+==/UserStyle== */
+
+video {
+  --brightness-filter: brightness(calc(var(--pref-brightness-level) / 100));
+  filter: var(--range-filter) var(--invert-filter) var(--brightness-filter);
+  transform: var(--ratio-transform);
+  clip-path: var(--crop-setting);
+}
