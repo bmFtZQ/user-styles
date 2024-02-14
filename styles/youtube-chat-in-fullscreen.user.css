@@ -5,7 +5,7 @@
 @description    Moves the live chat into the fullscreen player, like in Twitch theatre mode.
 @author         bmFtZQ
 @homepageURL    https://github.com/bmFtZQ/user-styles
-@updateURL      https://raw.githubusercontent.com/bmFtZQ/user-styles/main/styles/youtube-chat-in-fullscreen.user.css
+@updateURL      https://github.com/bmFtZQ/user-styles/raw/main/styles/youtube-chat-in-fullscreen.user.css
 @license        MIT
 @preprocessor   less
 @var range  pref-chat-width "Chat width" [320, 160, 480, 20, "px"]
